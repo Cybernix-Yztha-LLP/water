@@ -2,7 +2,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <esp_now.h>
-#include <LiquidCrystal_I2C.h>  // Include the LCD library
+#include <LiquidCrystal_PCF8574.h>  // Include the LCD library
 #include "custom_model.h"       // Your custom model (if needed)
 
 // WiFi credentials for web server
@@ -11,7 +11,7 @@ const char* password = "123456789";
 WebServer server(80);
 
 // Initialize the I2C LCD (change address if necessary, e.g., 0x27 or 0x3F)
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_PCF8574 lcd(0x27);
 
 // Tank parameters (tankHeight is not dynamic but you can use waterLevel for measured value)
 const float tankHeight = 25.0;
@@ -359,6 +359,10 @@ void updateLCD() {
 
 void setup() {
     Serial.begin(115200);
+    Wire.begin(21, 22);  // Use GPIO 21 (SDA) and GPIO 22 (SCL) for I2C on ESP32
+    lcd.begin(16, 2);     // Initialize LCD (16 columns, 2 rows)
+    lcd.setBacklight(1);  // Turn on the LCD backlight
+
     
     // Set device as WiFi station/AP for ESP‑NOW
     WiFi.mode(WIFI_AP_STA);
@@ -391,10 +395,7 @@ void setup() {
     }
     memset(&sensorData, 0, sizeof(sensorData));
     
-    // Initialize the LCD
-    lcd.init();
-    lcd.backlight();
-    lastLCDUpdate = millis();
+    
 }
 
 void loop() {

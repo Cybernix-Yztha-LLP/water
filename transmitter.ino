@@ -11,7 +11,7 @@ const char* password = "123456789";
 uint8_t receiverMacAddress[] = { 0xFC, 0xB4, 0x67, 0xF5, 0x18, 0xB8 };
 
 // Flow sensor pins and related variables
-const int flowSensorPins[6] = {34, 35, 32, 33, 26, 25};
+const int flowSensorPins[6] = {23, 22, 32, 33,26, 25};
 volatile int pulseCounts[6] = {0};
 unsigned long oldTime = 0;
 
@@ -19,7 +19,7 @@ unsigned long oldTime = 0;
 const int pressureSensorPin = 27;
 const int trigPin = 14;
 const int echoPin = 12;
-const float tankHeight = 25.0;
+const float tankHeight = 24.0;
 
 // pH sensor pin (assumed to be connected to analog pin 39)
 const int phSensorPin = 13;
@@ -141,8 +141,8 @@ void loop() {
     sensorData.waterLevel = tankHeight - (duration * 0.034 / 2);
     
     // Read pH sensor and convert voltage to pH (calibration required)
-    float phVoltage = analogRead(phSensorPin) * (3.3 / 4095.0);
-    sensorData.pH = 7 + ((2.5 - phVoltage) / 0.18);
+    float phVoltage = analogRead(phSensorPin) * (5 / 4095.0);
+    sensorData.pH = 7 + ((2.5 - phVoltage) / 5);
     
     // Send the sensor data via ESP‑NOW
     esp_err_t result = esp_now_send(receiverMacAddress, (uint8_t *)&sensorData, sizeof(sensorData));
@@ -152,6 +152,6 @@ void loop() {
       Serial.println("Error sending sensor data");
     }
     
-    oldTime = millis();
-  }
+  oldTime =millis();
+}
 }
