@@ -6,7 +6,7 @@ with open(tflite_model_path, "rb") as f:
     model_data = f.read()
 
 # Convert model data to a C array format
-hex_array = ', '.join(f'0x{byte:02x}' for byte in model_data)
+hex_array = ', '.join(f'0x{byte:03x}' for byte in model_data)
 
 # Write to model_data.h
 with open("model_data.h", "w") as f:
