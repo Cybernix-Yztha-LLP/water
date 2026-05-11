@@ -1,7 +1,7 @@
 import numpy as np
 
 # Read the TFLite model file
-tflite_model_path = "logistic_regression_model.tflite"
+tflite_model_path = "logistic_regression_model_v2.tflite"
 with open(tflite_model_path, "rb") as f:
     model_data = f.read()
 
